@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord 登录系统 - 测试页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #ececec 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-logged-in {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-logged-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .info-value {
+            color: #666;
+            word-break: break-all;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #7289da;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a72c4;
+        }
+        
+        .btn-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .btn-danger:hover {
+            background: #f5c6cb;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+        
+        .checklist {
+            list-style: none;
+        }
+        
+        .checklist li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checklist li:before {
+            content: '✓';
+            color: #28a745;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .avatar-display {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .avatar-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .feature-desc {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎭 Discord 登录系统测试</h1>
+        <p class="subtitle">测试和验证 Discord OAuth2 登录实现</p>
+        
+        <!-- 登录状态部分 -->
+        <div class="section">
+            <h2>
+                👤 登录状态
+                <span class="status-badge" id="status-badge">检查中...</span>
+            </h2>
+            
+            <div class="alert alert-info" id="info-alert" style="display: none;">
+                <strong>ℹ️ 信息：</strong> 请在浏览器中打开控制台（F12）查看详细日志。
+            </div>
+            
+            <div id="login-status-container"></div>
+        </div>
+        
+        <!-- 用户信息部分 -->
+        <div class="section" id="user-section" style="display: none;">
+            <h2>👥 用户信息</h2>
+            
+            <div class="avatar-display">
+                <div class="avatar-img" id="avatar-display">👤</div>
+                <div>
+                    <div class="info-card">
+                        <div class="info-row">
+                            <span class="info-label">用户名</span>
+                            <span class="info-value" id="user-username">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Discord ID</span>
+                            <span class="info-value" id="user-id">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">邮箱</span>
+                            <span class="info-value" id="user-email">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Token 信息部分 -->
+        <div class="section" id="token-section" style="display: none;">
+            <h2>🔐 Token 信息</h2>
+            
+            <div class="alert alert-warning">
+                <strong>⚠️ 安全提示：</strong> Token 已加密。在生产环境中，确保通过 HTTPS 传输。
+            </div>
+            
+            <div class="info-card">
+                <div class="info-row">
+                    <span class="info-label">Token 状态</span>
+                    <span class="info-value" id="token-status">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Token 过期时间</span>
+                    <span class="info-value" id="token-expiry">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Token 长度</span>
+                    <span class="info-value" id="token-length">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 本地存储部分 -->
+        <div class="section" id="storage-section" style="display: none;">
+            <h2>💾 本地存储数据</h2>
+            
+            <div class="alert alert-info">
+                <strong>ℹ️ 说明：</strong> 这些数据存储在浏览器的 LocalStorage 中。登出后将被清除。
+            </div>
+            
+            <div class="code-block" id="storage-data">正在加载...</div>
+        </div>
+        
+        <!-- 功能测试部分 -->
+        <div class="section">
+            <h2>🧪 功能测试</h2>
+            
+            <div class="button-group">
+                <button class="btn-primary" onclick="testLoginStatus()">检查登录状态</button>
+                <button class="btn-primary" onclick="testGetUserData()">获取用户数据</button>
+                <button class="btn-primary" onclick="testGetToken()">获取 Token</button>
+                <button class="btn-primary" onclick="testStorageData()">查看存储数据</button>
+                <button class="btn-secondary" onclick="testConsoleLog()">打开控制台</button>
+            </div>
+        </div>
+        
+        <!-- 操作部分 -->
+        <div class="section" id="action-section" style="display: none;">
+            <h2>⚙️ 操作</h2>
+            
+            <div class="button-group">
+                <button class="btn-danger" onclick="handleLogout()">
+                    🚪 登出
+                </button>
+                <button class="btn-secondary" onclick="goToApp()">
+                    ➡️ 返回应用
+                </button>
+                <button class="btn-secondary" onclick="goToLogin()">
+                    🔐 重新登录
+                </button>
+            </div>
+        </div>
+        
+        <!-- 功能特性部分 -->
+        <div class="section">
+            <h2>✨ 功能特性</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-title">简约设计</div>
+                    <div class="feature-desc">黑白灰简约风格 + 猫耳装饰动画</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <div class="feature-title">安全认证</div>
+                    <div class="feature-desc">Discord OAuth2 + CSRF 防护</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <div class="feature-title">本地存储</div>
+                    <div class="feature-desc">登录状态持久化</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-title">响应式</div>
+                    <div class="feature-desc">完美适配所有设备</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌙</div>
+                    <div class="feature-title">深色模式</div>
+                    <div class="feature-desc">自动适配系统设置</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">快速集成</div>
+                    <div class="feature-desc">完整示例和文档</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 快速参考部分 -->
+        <div class="section">
+            <h2>📚 快速参考</h2>
+            
+            <p style="margin-bottom: 15px;">在您的应用中使用登录系统：</p>
+            
+            <p style="font-weight: 600; margin-bottom: 8px;">1. 检查登录状态</p>
+            <div class="code-block">if (authManager.isUserLoggedIn()) {
+    const user = authManager.getCurrentUser();
+    console.log('用户:', user);
+}</div>
+            
+            <p style="font-weight: 600; margin-bottom: 8px;">2. 获取 Token</p>
+            <div class="code-block">const token = authManager.getAuthToken();
+
+fetch('/api/data', {
+    headers: {
+        'Authorization': `Bearer ${token}`
+    }
+})</div>
+            
+            <p style="font-weight: 600; margin-bottom: 8px;">3. 执行登出</p>
+            <div class="code-block">authManager.logout();</div>
+        </div>
+        
+        <!-- 部署清单部分 -->
+        <div class="section">
+            <h2>✅ 部署清单</h2>
+            
+            <ul class="checklist">
+                <li>创建 Discord 应用并获取 CLIENT_ID</li>
+                <li>配置重定向 URI</li>
+                <li>在 login.js 中更新 CLIENT_ID</li>
+                <li>实现后端认证 API（可选但推荐）</li>
+                <li>在生产环境启用 HTTPS</li>
+                <li>测试完整登录流程</li>
+                <li>部署到服务器</li>
+                <li>设置监控和日志</li>
+            </ul>
+        </div>
+        
+        <!-- 帮助链接部分 -->
+        <div class="section">
+            <h2>🆘 帮助和文档</h2>
+            
+            <p style="margin-bottom: 15px;">相关文档：</p>
+            
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 10px;">
+                    📖 <a href="README_LOGIN.md" target="_blank" style="color: #7289da;">README_LOGIN.md</a> 
+                    - 完整使用指南
+                </li>
+                <li style="margin-bottom: 10px;">
+                    📋 <a href="LOGIN_GUIDE.js" target="_blank" style="color: #7289da;">LOGIN_GUIDE.js</a> 
+                    - 详细配置指南
+                </li>
+                <li style="margin-bottom: 10px;">
+                    🚀 <a href="QUICK_START.md" target="_blank" style="color: #7289da;">QUICK_START.md</a> 
+                    - 快速部署指南
+                </li>
+                <li style="margin-bottom: 10px;">
+                    💻 <a href="LOGIN_INTEGRATION_HELPER.js" target="_blank" style="color: #7289da;">LOGIN_INTEGRATION_HELPER.js</a> 
+                    - 集成代码示例
+                </li>
+                <li>
+                    🌐 <a href="https://discord.com/developers/docs/topics/oauth2" target="_blank" style="color: #7289da;">Discord OAuth2 文档</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="login.js"></script>
+    <script>
+        // 初始化测试页面
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLoginStatus();
+            updateStorageDisplay();
+        });
+        
+        // 更新登录状态显示
+        function updateLoginStatus() {
+            if (typeof authManager === 'undefined') {
+                document.getElementById('login-status-container').innerHTML = 
+                    '<div class="alert alert-warning">⚠️ authManager 未加载</div>';
+                return;
+            }
+            
+            const isLoggedIn = authManager.isUserLoggedIn();
+            const statusBadge = document.getElementById('status-badge');
+            const userSection = document.getElementById('user-section');
+            const tokenSection = document.getElementById('token-section');
+            const actionSection = document.getElementById('action-section');
+            const infoAlert = document.getElementById('info-alert');
+            
+            if (isLoggedIn) {
+                statusBadge.textContent = '已登录 ✅';
+                statusBadge.className = 'status-badge status-logged-in';
+                
+                const user = authManager.getCurrentUser();
+                if (user) {
+                    document.getElementById('user-username').textContent = user.username || '-';
+                    document.getElementById('user-id').textContent = user.id || '-';
+                    document.getElementById('user-email').textContent = user.email || '-';
+                    
+                    userSection.style.display = 'block';
+                    tokenSection.style.display = 'block';
+                    actionSection.style.display = 'block';
+                    infoAlert.style.display = 'block';
+                    
+                    // 更新 Token 信息
+                    const token = authManager.getAuthToken();
+                    const expiry = localStorage.getItem('discord_token_expiry');
+                    
+                    document.getElementById('token-status').textContent = token ? '存在' : '不存在';
+                    document.getElementById('token-length').textContent = 
+                        token ? `${token.length} 个字符` : '-';
+                    
+                    if (expiry) {
+                        const expiryDate = new Date(parseInt(expiry));
+                        const now = new Date();
+                        const timeLeft = Math.ceil((expiryDate - now) / 1000 / 60); // 分钟
+                        document.getElementById('token-expiry').textContent = 
+                            `${expiryDate.toLocaleString()} (还剩 ${timeLeft} 分钟)`;
+                    }
+                }
+                
+                document.getElementById('login-status-container').innerHTML = 
+                    '<div class="alert alert-success">✅ 您已成功登录</div>';
+            } else {
+                statusBadge.textContent = '未登录 ❌';
+                statusBadge.className = 'status-badge status-logged-out';
+                userSection.style.display = 'none';
+                tokenSection.style.display = 'none';
+                actionSection.style.display = 'none';
+                infoAlert.style.display = 'none';
+                
+                document.getElementById('login-status-container').innerHTML = 
+                    '<div class="alert alert-warning">⚠️ 您未登录。<a href="login.html">点击这里登录</a></div>';
+            }
+        }
+        
+        // 更新存储数据显示
+        function updateStorageDisplay() {
+            const storageData = {
+                'discord_auth_token': localStorage.getItem('discord_auth_token') ? 
+                    `已存储 (${localStorage.getItem('discord_auth_token').length} 字符)` : '未存储',
+                'discord_user_data': localStorage.getItem('discord_user_data') ? 
+                    JSON.parse(localStorage.getItem('discord_user_data')) : '未存储',
+                'discord_token_expiry': localStorage.getItem('discord_token_expiry') || '未存储'
+            };
+            
+            document.getElementById('storage-data').textContent = 
+                JSON.stringify(storageData, null, 2);
+        }
+        
+        // 测试函数
+        function testLoginStatus() {
+            console.log('=== 检查登录状态 ===');
+            const isLoggedIn = authManager.isUserLoggedIn();
+            console.log('已登录:', isLoggedIn);
+            alert('已登录: ' + isLoggedIn + '\n查看控制台了解详细信息');
+        }
+        
+        function testGetUserData() {
+            console.log('=== 获取用户数据 ===');
+            const user = authManager.getCurrentUser();
+            console.log('用户数据:', user);
+            alert('用户: ' + (user ? user.username : '未登录') + '\n查看控制台了解详细信息');
+        }
+        
+        function testGetToken() {
+            console.log('=== 获取 Token ===');
+            const token = authManager.getAuthToken();
+            console.log('Token:', token);
+            alert('Token 长度: ' + (token ? token.length : 0) + ' 字符\n查看控制台了解详细信息');
+        }
+        
+        function testStorageData() {
+            console.log('=== 存储数据 ===');
+            console.log('discord_auth_token:', localStorage.getItem('discord_auth_token'));
+            console.log('discord_user_data:', localStorage.getItem('discord_user_data'));
+            console.log('discord_token_expiry:', localStorage.getItem('discord_token_expiry'));
+            updateStorageDisplay();
+            alert('存储数据已在控制台显示');
+        }
+        
+        function testConsoleLog() {
+            console.log('✅ 这是一条来自控制台的测试消息');
+            alert('✅ 控制台已打开\n按 F12 查看控制台日志');
+        }
+        
+        function handleLogout() {
+            if (confirm('确定要退出登录吗？')) {
+                authManager.logout();
+            }
+        }
+        
+        function goToApp() {
+            window.location.href = 'index.html';
+        }
+        
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
